@@ -1,4 +1,7 @@
-from xml.dom.minidom import parseString
+try:
+    from lxml import etree
+except ImportError:
+    from xml.dom.minidom import parseString
 from django.template.loader import render_to_string
 
 
@@ -13,11 +16,14 @@ def render_table_parts(tbody_template=None, tfoot_template="ajaxtables/table_tfo
 
 
 def render_table(*args, **kwargs):
-    html = render_to_string(*args, **kwargs)
-    root = parseString(html.encode('utf8'))
     retval = {}
-    retval['tbody'] = root.getElementsByTagName("tbody")[0].toxml()
-    retval['tbody'] = retval['tbody'].replace('<tbody>', '').replace('</tbody>', '') #TODO: some other solution
-    retval['tfoot'] = root.getElementsByTagName("tfoot")[0].toxml()
-    retval['tfoot'] = retval['tfoot'].replace('<tfoot>', '').replace('</tfoot>', '') #TODO: some other solution
+    html = render_to_string(*args, **kwargs)
+    try:
+        root = etree.HTML(html)
+        retval['tbody'] = ''.join([etree.tostring(row) for row in root.xpath('//tbody/tr')])
+        retval['tfoot'] = ''.join([etree.tostring(row) for row in root.xpath('//tfoot/tr')])
+    except NameError:
+        root = parseString(html.encode('utf8'))
+        retval['tbody'] = ''.join([row.toxml() for row in root.getElementsByTagName("tbody")[0].childNodes])
+        retval['tfoot'] = ''.join([row.toxml() for row in root.getElementsByTagName("tfoot")[0].childNodes])
     return retval
