@@ -1,0 +1,11 @@
+{% for state in objects %}
+    <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>{{ state }}</td>
+        <td>{{ state.joined|date:"Y-m-d"|default:"Founder" }}</td>
+    </tr>
+{% empty %}
+    <tr>
+        <td colspan="3">No rows</td>
+    </tr>
+{% endfor %}

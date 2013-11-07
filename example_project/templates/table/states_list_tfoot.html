@@ -1,0 +1,27 @@
+<tr class="paging">
+    <td colspan="3">
+        <ul class="pagination pagination-lg">
+            {% if states.has_previous %}
+            <li>
+                <a href="#" data-page="{{ states.previous_page_number }}">← Prev</a>
+            </li>
+            <li>
+                <a href="#" data-page="{{ states.previous_page_number }}">{{ states.previous_page_number }}</a>
+            </li>
+            {% else %}
+            <li class="disabled"><a href="#">← Prev</a></li>
+            {% endif %}
+            <li class="active"><a href="#">{{ states.number }}</a></li>
+            {% if states.has_next %}
+            <li>
+                <a href="#" data-page="{{ states.next_page_number }}">{{ states.next_page_number }}</a>
+            </li>
+            <li>
+                <a href="#" data-page="{{ states.next_page_number }}">Next →</a>
+            </li>
+            {% else %}
+            <li class="disabled"><a href="#">Next →</a></li>
+            {% endif %}
+        </ul>
+    </td>
+</tr>
