@@ -1,3 +1,3 @@
 $(function () {
-    $('table[data-ajaxsource]').ajaxTable();
+    $('table.ajax').ajaxTable();
 });

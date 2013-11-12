@@ -1,0 +1,44 @@
+<table>
+    <tbody>
+        {% for obj in object_list %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ obj }}</td>
+                <td>{{ obj.joined|date:"Y-m-d"|default:"Founder" }}</td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="3">No rows</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr class="paging">
+            <td colspan="4">
+                <ul class="pagination pagination-lg">
+                    {% if object_list.has_previous %}
+                    <li>
+                        <a href="#" data-page="{{ object_list.previous_page_number }}">← Prev</a>
+                    </li>
+                    <li>
+                        <a href="#" data-page="{{ object_list.previous_page_number }}">{{ object_list.previous_page_number }}</a>
+                    </li>
+                    {% else %}
+                    <li class="disabled"><a href="#">← Prev</a></li>
+                    {% endif %}
+                    <li class="active"><a href="#">{{ object_list.number }}</a></li>
+                    {% if object_list.has_next %}
+                    <li>
+                        <a href="#" data-page="{{ object_list.next_page_number }}">{{ object_list.next_page_number }}</a>
+                    </li>
+                    <li>
+                        <a href="#" data-page="{{ object_list.next_page_number }}">Next →</a>
+                    </li>
+                    {% else %}
+                    <li class="disabled"><a href="#">Next →</a></li>
+                    {% endif %}
+                </ul>
+            </td>
+        </tr>
+    </tfoot>
+</table>

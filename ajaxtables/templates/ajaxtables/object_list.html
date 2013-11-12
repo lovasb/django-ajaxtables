@@ -6,13 +6,6 @@
 {% block head %}
     {{ block.super }}
     {% ajaxtables_imports import_cookies_js=True import_autoload=True %}
-    <style>
-        .table tfoot > tr.paging > td {
-            vertical-align: bottom;
-            text-align: center;
-            border: 1px white solid;
-        }
-    </style>
     <script type="text/javascript">
         {% if form %}
         $(function () {
@@ -29,9 +22,8 @@
 {% if form %}
     {% crispy form form.helper %}
 {% endif %}
-<table class="table table-bordered table-condensed table-customized table-striped"
-    data-ajaxsource="{% url 'states-list-data' %}" data-pagesize="3"
-    {% if form %}data-post="#{{ form.helper.form_id }}"{% endif %}>
+<table class="table table-bordered table-condensed table-customized table-striped ajax"
+    data-pagesize="{{ page_size|default:10 }}" {% if form %}data-post="#{{ form.helper.form_id }}"{% endif %}>
     <thead>
         <tr>
             <th></th>

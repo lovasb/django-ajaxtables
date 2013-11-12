@@ -1,0 +1,226 @@
+[
+{
+    "pk": 1, 
+    "model": "table.state", 
+    "fields": {
+        "name": "Croatia", 
+        "joined": "2013-07-01"
+    }
+},
+{
+    "pk": 2, 
+    "model": "table.state", 
+    "fields": {
+        "name": "Bulgaria", 
+        "joined": "2007-01-01"
+    }
+},
+{
+    "pk": 3, 
+    "model": "table.state", 
+    "fields": {
+        "name": "Romania", 
+        "joined": "2007-01-01"
+    }
+},
+{
+    "pk": 4, 
+    "model": "table.state", 
+    "fields": {
+        "name": "Cyprus", 
+        "joined": "2004-05-01"
+    }
+},
+{
+    "pk": 5, 
+    "model": "table.state", 
+    "fields": {
+        "name": "Czech Republic", 
+        "joined": "2004-05-01"
+    }
+},
+{
+    "pk": 6, 
+    "model": "table.state", 
+    "fields": {
+        "name": "Estonia", 
+        "joined": "2004-05-01"
+    }
+},
+{
+    "pk": 7, 
+    "model": "table.state", 
+    "fields": {
+        "name": "Hungary", 
+        "joined": "2004-05-01"
+    }
+},
+{
+    "pk": 8, 
+    "model": "table.state", 
+    "fields": {
+        "name": "Latvia", 
+        "joined": "2004-05-01"
+    }
+},
+{
+    "pk": 9, 
+    "model": "table.state", 
+    "fields": {
+        "name": "Lithuania", 
+        "joined": "2004-05-01"
+    }
+},
+{
+    "pk": 10, 
+    "model": "table.state", 
+    "fields": {
+        "name": "Malta", 
+        "joined": "2004-05-01"
+    }
+},
+{
+    "pk": 11, 
+    "model": "table.state", 
+    "fields": {
+        "name": "Poland", 
+        "joined": "2004-05-01"
+    }
+},
+{
+    "pk": 12, 
+    "model": "table.state", 
+    "fields": {
+        "name": "Slovakia", 
+        "joined": "2004-05-01"
+    }
+},
+{
+    "pk": 13, 
+    "model": "table.state", 
+    "fields": {
+        "name": "Slovenia", 
+        "joined": "2004-05-01"
+    }
+},
+{
+    "pk": 14, 
+    "model": "table.state", 
+    "fields": {
+        "name": "Austria", 
+        "joined": "1995-01-01"
+    }
+},
+{
+    "pk": 15, 
+    "model": "table.state", 
+    "fields": {
+        "name": "Finland", 
+        "joined": "1995-01-01"
+    }
+},
+{
+    "pk": 16, 
+    "model": "table.state", 
+    "fields": {
+        "name": "Sweden", 
+        "joined": "1995-01-01"
+    }
+},
+{
+    "pk": 17, 
+    "model": "table.state", 
+    "fields": {
+        "name": "Portugal", 
+        "joined": "1986-01-01"
+    }
+},
+{
+    "pk": 18, 
+    "model": "table.state", 
+    "fields": {
+        "name": "Spain", 
+        "joined": "1986-01-01"
+    }
+},
+{
+    "pk": 19, 
+    "model": "table.state", 
+    "fields": {
+        "name": "Greece", 
+        "joined": "1981-01-01"
+    }
+},
+{
+    "pk": 20, 
+    "model": "table.state", 
+    "fields": {
+        "name": "Denmark", 
+        "joined": "1973-01-01"
+    }
+},
+{
+    "pk": 21, 
+    "model": "table.state", 
+    "fields": {
+        "name": "Republic of Ireland", 
+        "joined": "1973-01-01"
+    }
+},
+{
+    "pk": 22, 
+    "model": "table.state", 
+    "fields": {
+        "name": "United Kingdom", 
+        "joined": "1973-01-01"
+    }
+},
+{
+    "pk": 23, 
+    "model": "table.state", 
+    "fields": {
+        "name": "Germany", 
+        "joined": null
+    }
+},
+{
+    "pk": 24, 
+    "model": "table.state", 
+    "fields": {
+        "name": "Belgium", 
+        "joined": null
+    }
+},
+{
+    "pk": 25, 
+    "model": "table.state", 
+    "fields": {
+        "name": "France", 
+        "joined": null
+    }
+},
+{
+    "pk": 26, 
+    "model": "table.state", 
+    "fields": {
+        "name": "Italy", 
+        "joined": null
+    }
+},
+{
+    "pk": 27, 
+    "model": "table.state", 
+    "fields": {
+        "name": "Luxembourg", 
+        "joined": null
+    }
+},
+{
+    "pk": 28, 
+    "model": "table.state", 
+    "fields": {
+        "name": "Netherlands", 
+        "joined": null
+    }
+}
+]

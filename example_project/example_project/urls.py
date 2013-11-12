@@ -17,7 +17,7 @@ urlpatterns = patterns('',
     url(r'^accounts/reset_password/done/$', auth_views.password_reset_done),
     url(r'^accounts/reset_password/(?P<uidb36>[0-9A-Za-z]+)-(?P<token>.+)/$', auth_views.password_reset_confirm), 
     url(r'^accounts/reset_password/complete/$', auth_views.password_reset_complete),
-    url(r'', include('table.urls')),
+    url(r'^table', include('table.urls')),
 )
 
 if settings.DEBUG:

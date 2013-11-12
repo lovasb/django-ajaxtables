@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load ajaxtables_tags %}
+
+{% block head %}
+    {{ block.super }}
+    {% ajaxtables_imports import_cookies_js=True import_autoload=True %}
+    <style>
+        .table tfoot > tr.paging > td {
+            vertical-align: bottom;
+            text-align: center;
+            border: 1px white solid;
+        }
+    </style>
+    <script type="text/javascript">
+        {% if form %}
+        $(function () {
+            $('#submit-id-query').click(function (ev) {
+                ev.preventDefault();
+                $('table').ajaxTable("reload");
+            });
+        });
+        {% endif %}
+    </script>
+{% endblock %}
+
+{% block content %}
+{% if form %}
+    {% crispy form form.helper %}
+{% endif %}
+<table class="table table-bordered table-condensed table-customized table-striped ajax"
+    data-pagesize="3" {% if form %}data-post="#{{ form.helper.form_id }}"{% endif %}>
+    <thead>
+        <tr>
+            <th></th>
+            <th>State name</th>
+            <th>Joined to EU</th>
+            <th>Operations</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+    <tfoot></tfoot>
+</table>
+{% endblock %}

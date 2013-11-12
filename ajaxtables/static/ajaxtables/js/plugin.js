@@ -3,7 +3,8 @@ $.fn.ajaxTable = function() {
     
     function AjaxTable(el, options) {
         this.element = el
-        this.url = el.data("ajaxsource");
+        this.url = el.data("ajaxsource") || window.location.href;
+        console.log(this.url)
         this.post = el.data("post")
         this.method = this.post == undefined ? 'get' : 'post'
         
@@ -18,15 +19,13 @@ $.fn.ajaxTable = function() {
             page_size = $.cookie("page_size");
             act_page = page || $.cookie("act_page") || 1;
             $.ajax({
-                url: parent.url + '?' + $.param({'pageSize': page_size, 'actPage': act_page}),
+                url: parent.url + '?' + $.param({'pageSize': page_size, 'page': act_page}),
                 type: parent.method,
                 data: $(parent.post).serialize(),
                 async: false,
                 success: function (retval) {
-                    if (retval.tbody && retval.tfoot) {
-                        parent.element.find('tbody').html(retval.tbody)   
-                        parent.element.find('tfoot').html(retval.tfoot)
-                    }
+                    parent.element.find('tbody').html($(retval).find('tbody > tr'))
+                    parent.element.find('tfoot').html($(retval).find('tfoot > tr'))
 
                     $('ul.pagination > li > a').click(function (e) {
                         e.preventDefault();
