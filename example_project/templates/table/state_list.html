@@ -5,7 +5,7 @@
 
 {% block head %}
     {{ block.super }}
-    {% ajaxtables_imports import_cookies_js=True import_autoload=True %}
+    {% ajaxtables_imports import_cookies_js=True import_autoload=False %}
     <style>
         .table tfoot > tr.paging > td {
             vertical-align: bottom;
@@ -16,6 +16,9 @@
     <script type="text/javascript">
         {% if form %}
         $(function () {
+            $('table').ajaxTable({
+                onReload: function () { console.log("ready"); }
+            });
             $('#submit-id-query').click(function (ev) {
                 ev.preventDefault();
                 $('table').ajaxTable("reload");
