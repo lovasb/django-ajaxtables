@@ -1,6 +1,7 @@
 from vanilla import ListView
 from django.http import HttpResponse
 from django.template.context import RequestContext
+from django.core.paginator import InvalidPage
 
 class AjaxListView(ListView):
     template_names = ['ajaxtables/object_list.html', 'ajaxtables/object_list_data.html']
@@ -29,7 +30,11 @@ class AjaxListView(ListView):
 
     def paginate_queryset(self, queryset):
         page_size, act_page = self.get_page_from_request()
-        return super(AjaxListView, self).paginate_queryset(queryset, page_size)
+        try:
+            return super(AjaxListView, self).paginate_queryset(queryset, page_size)
+        except InvalidPage:
+            paginator = self.get_paginator(queryset, page_size)
+            return paginator.page(1)
 
     def get(self, request, *args, **kwargs):
         if request.is_ajax(): ## no filter form provided, and request for data
