@@ -105,7 +105,7 @@ Ajax loaded tables in django made easy.
 """
 
 setup(
-    name = 'mango',
+    name = 'ajaxtables',
     version = version,
     description = "Ajax loaded tables in django made easy.",
     long_description = LONG_DESCRIPTION,
