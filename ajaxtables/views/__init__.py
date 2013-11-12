@@ -1,7 +1,7 @@
 from vanilla import ListView
 from django.http import HttpResponse
 from django.template.context import RequestContext
-from django.core.paginator import InvalidPage
+from django.http import Http404
 
 class AjaxListView(ListView):
     template_names = ['ajaxtables/object_list.html', 'ajaxtables/object_list_data.html']
@@ -32,7 +32,7 @@ class AjaxListView(ListView):
         page_size, act_page = self.get_page_from_request()
         try:
             return super(AjaxListView, self).paginate_queryset(queryset, page_size)
-        except InvalidPage:
+        except Http404:
             paginator = self.get_paginator(queryset, page_size)
             return paginator.page(1)
 
