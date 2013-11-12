@@ -27,7 +27,6 @@
                     $('ul.pagination > li > a').click(function (e) {
                         e.preventDefault();
                     });
-                    parent.onReload();
                 }
             });
             
@@ -40,6 +39,9 @@
                 page = $(this).data('page')
                 parent.reload(page);
             });
+
+            /* Trigger onReload event */
+            parent.onReload();
         }
     };
 
