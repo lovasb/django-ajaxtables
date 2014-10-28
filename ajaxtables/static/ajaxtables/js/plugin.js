@@ -6,7 +6,7 @@
         this.method = this.post === undefined ? 'get' : 'post';
         this.onReload = options.onReload;
         this.hiddenCols = [];
-        this.sortBy = [];
+        this.sortBy = {};
 
         this.init = function() {
             page_size = $.cookie("page_size") || el.data("pagesize") || 10;
@@ -21,24 +21,33 @@
                 var sortButton = document.createElement('span');
                 elem.prepend(sortButton);
 
-                $(sortButton).addClass('at-btn at-sort-btn at-sort-btn-asc glyphicon glyphicon-chevron-up')
+                $(sortButton).addClass('at-btn at-sort-btn glyphicon glyphicon-sort')
                     .click(function(){
                         var elem = $(this);
-                        if(elem.hasClass('at-sort-btn-asc')){
-                            // descending order
-                            elem.removeClass('at-sort-btn-asc').addClass('at-sort-btn-desc');
-                            elem.removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down');
+                        if(elem.hasClass('glyphicon-sort')){
+                            elem.removeClass('glyphicon-sort').addClass('glyphicon-sort-by-attributes');
+                            delete self.sortBy[elem_id];
 
                             self.sortBy[elem_id] = {
-                                type: 'desc',
+                                id: elem_id,
                                 col_index: col_index
-                            }
+                            };
+                            self.reload();
                         }
-                        else {
-                            elem.removeClass('at-sort-btn-desc').addClass('at-sort-btn-asc');
-                            elem.removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
+                        else if(elem.hasClass('glyphicon-sort-by-attributes')){
+                            elem.removeClass('glyphicon-sort-by-attributes').addClass('glyphicon-sort-by-attributes-alt');
+                            delete self.sortBy[elem_id];
 
-                            delete self.sortBy[elem_id]
+                            self.sortBy[elem_id] = {
+                                id: '-' + elem_id,
+                                col_index: col_index
+                            };
+                            self.reload();
+                        }
+                        else if(elem.hasClass('glyphicon-sort-by-attributes-alt')){
+                            elem.removeClass('glyphicon-sort-by-attributes-alt').addClass('glyphicon-sort');
+                            delete self.sortBy[elem_id];
+                            self.reload();
                         }
                     });
 
@@ -62,13 +71,28 @@
             page_size = $.cookie("page_size");
             act_page = page || $.cookie("act_page") || 1;
 
-            console.log('Hidden columns:', this.hiddenCols);
-            console.log('Sort by:', this.sortBy);
-
             $.ajax({
                 url: parent.url + '?' + $.param({'pageSize': page_size, 'page': act_page}),
                 type: parent.method,
-                data: $(parent.post).serialize(),
+                data: (function(){
+                    var serializedForm = $(parent.post).serializeArray();
+
+                    $.each(parent['sortBy'], function(k, v){
+                        serializedForm.push({
+                            name: 'sort_by',
+                            value: v.id
+                        });
+                    });
+
+                    $.each(parent['hiddenCols'], function(i, o){
+                        serializedForm.push({
+                            name: 'hidden_cols',
+                            value: o.id
+                        });
+                    });
+
+                    return serializedForm;
+                    }()),
                 async: false,
                 success: function (retval) {
                     parent.element.find('tbody').html($(retval).find('tbody > tr'));

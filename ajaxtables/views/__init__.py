@@ -1,7 +1,8 @@
-from vanilla import ListView
-from django.http import HttpResponse
-from django.template.context import RequestContext
 from django.http import Http404
+from django.core.exceptions import ImproperlyConfigured
+
+from vanilla import ListView
+
 
 class AjaxListView(ListView):
     template_names = ['ajaxtables/object_list.html', 'ajaxtables/object_list_data.html']
@@ -28,6 +29,13 @@ class AjaxListView(ListView):
     def form_to_filters(self, form_data):
         return {}
 
+    def append_display_filters(self, queryset):
+        sort_by = self.request.POST.get('sort_by', None)
+        if sort_by:
+            queryset = queryset.order_by(sort_by)
+
+        return queryset
+
     def paginate_queryset(self, queryset):
         page_size, act_page = self.get_page_from_request()
         try:
@@ -53,9 +61,10 @@ class AjaxListView(ListView):
 
     def post(self, request, *args, **kwargs):
         form = self.filter_form_class(request.POST or None)
+        print request.POST
         if form.is_valid():
             filters = self.form_to_filters(form.cleaned_data)
-            queryset = self.get_queryset().filter(**filters)
+            queryset = self.append_display_filters(self.get_queryset().filter(**filters))
             page = self.paginate_queryset(queryset)
             self.object_list = page.object_list
             context = self.get_context_data(
