@@ -15,6 +15,11 @@ class AjaxListView(ListView):
         act_page = int(self.request.GET.get('toPage', 1))
         return page_size, act_page
 
+    def get_context_data(self, **kwargs):
+        context = super(AjaxListView, self).get_context_data(**kwargs)
+        context['hidden'] = {k: True for k in self.request.POST.getlist('hidden_cols', None)}
+        return context
+
     def get_template_names(self):
         try:
             assert len(self.template_names) == 2
@@ -30,13 +35,14 @@ class AjaxListView(ListView):
         return {}
 
     def append_display_filters(self, queryset):
-        sort_by = self.request.POST.get('sort_by', None)
+        sort_by = self.request.POST.getlist('sort_by', None)
         if sort_by:
-            queryset = queryset.order_by(sort_by)
+            print sort_by
+            queryset = queryset.order_by(*sort_by)
 
-        hidden_cols = self.request.POST.get('hidden_cols', None)
+        hidden_cols = self.request.POST.getlist('hidden_cols', None)
         if hidden_cols:
-            queryset = queryset.defer(hidden_cols)
+            queryset = queryset.defer(*hidden_cols)
         return queryset
 
     def paginate_queryset(self, queryset):
@@ -64,7 +70,6 @@ class AjaxListView(ListView):
 
     def post(self, request, *args, **kwargs):
         form = self.filter_form_class(request.POST or None)
-        print request.POST
         if form.is_valid():
             filters = self.form_to_filters(form.cleaned_data)
             queryset = self.append_display_filters(self.get_queryset().filter(**filters))

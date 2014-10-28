@@ -60,7 +60,10 @@
                 elem.append(hideButton);
                 $(hideButton).addClass('at-btn at-hide-btn glyphicon glyphicon-remove')
                     .click(function(){
-                        self.displayFilters.hidden_cols.push({'value': elem_id});
+                        self.displayFilters.hidden_cols.push({
+                            'value': elem_id,
+                            'col_index': col_index
+                        });
                         $("thead th:nth-child(" + col_index + "), tbody td:nth-child(" + col_index + ")", self.element).hide();
                         self.showHidden.show();
                         self.reload();
@@ -112,8 +115,14 @@
                     }()),
                 async: false,
                 success: function (retval) {
-                    parent.element.find('tbody').html($(retval).find('tbody > tr'));
-                    parent.element.find('tfoot').html($(retval).find('tfoot > tr'));
+                    var html = $(retval);
+
+                    $.each(parent.displayFilters.hidden_cols, function (i, o) {
+                        $('tbody td:nth-child(' + o.col_index +')', html).hide();
+                    });
+
+                    parent.element.find('tbody').html(html.find('tbody > tr'));
+                    parent.element.find('tfoot').html(html.find('tfoot > tr'));
                     $('ul.pagination > li > a').click(function (e) {
                         e.preventDefault();
                     });
