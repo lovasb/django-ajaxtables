@@ -5,8 +5,11 @@
         this.post = el.data("post");
         this.method = this.post === undefined ? 'get' : 'post';
         this.onReload = options.onReload;
-        this.hiddenCols = [];
-        this.sortBy = {};
+
+        this.displayFilters = {
+            sort_by: {},
+            hidden_cols: []
+        };
 
         this.init = function() {
             page_size = $.cookie("page_size") || el.data("pagesize") || 10;
@@ -26,27 +29,28 @@
                         var elem = $(this);
                         if(elem.hasClass('glyphicon-sort')){
                             elem.removeClass('glyphicon-sort').addClass('glyphicon-sort-by-attributes');
-                            delete self.sortBy[elem_id];
-
-                            self.sortBy[elem_id] = {
-                                id: elem_id,
+                            delete self.displayFilters.sort_by[elem_id];
+                            self.displayFilters.sort_by[elem_id] = {
+                                value: elem_id,
                                 col_index: col_index
                             };
+
                             self.reload();
                         }
                         else if(elem.hasClass('glyphicon-sort-by-attributes')){
                             elem.removeClass('glyphicon-sort-by-attributes').addClass('glyphicon-sort-by-attributes-alt');
-                            delete self.sortBy[elem_id];
-
-                            self.sortBy[elem_id] = {
-                                id: '-' + elem_id,
+                            delete self.displayFilters.sort_by[elem_id];
+                            self.displayFilters.sort_by[elem_id] = {
+                                value: '-' + elem_id,
                                 col_index: col_index
                             };
+
                             self.reload();
                         }
                         else if(elem.hasClass('glyphicon-sort-by-attributes-alt')){
                             elem.removeClass('glyphicon-sort-by-attributes-alt').addClass('glyphicon-sort');
-                            delete self.sortBy[elem_id];
+                            delete self.displayFilters.sort_by[elem_id];
+
                             self.reload();
                         }
                     });
@@ -55,8 +59,8 @@
                 elem.append(hideButton);
                 $(hideButton).addClass('at-btn at-hide-btn glyphicon glyphicon-remove')
                     .click(function(){
-                        self.hiddenCols.push({
-                            'id': elem_id,
+                        self.displayFilters.hidden_cols.push({
+                            'value': elem_id,
                             'col_index': col_index
                         });
                         $("thead th:nth-child(" + col_index + "), tbody td:nth-child(" + col_index + ")").hide();
@@ -77,18 +81,13 @@
                 data: (function(){
                     var serializedForm = $(parent.post).serializeArray();
 
-                    $.each(parent['sortBy'], function(k, v){
-                        serializedForm.push({
-                            name: 'sort_by',
-                            value: v.id
-                        });
-                    });
-
-                    $.each(parent['hiddenCols'], function(i, o){
-                        serializedForm.push({
-                            name: 'hidden_cols',
-                            value: o.id
-                        });
+                    $.each(parent.displayFilters, function (k, v) {
+                        $.each(v, function (i, obj) {
+                            serializedForm.push({
+                                name: k,
+                                value: obj.value
+                            });
+                        })
                     });
 
                     return serializedForm;

@@ -33,7 +33,6 @@ class AjaxListView(ListView):
         sort_by = self.request.POST.get('sort_by', None)
         if sort_by:
             queryset = queryset.order_by(sort_by)
-
         return queryset
 
     def paginate_queryset(self, queryset):
