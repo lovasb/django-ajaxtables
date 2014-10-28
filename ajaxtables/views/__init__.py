@@ -33,6 +33,10 @@ class AjaxListView(ListView):
         sort_by = self.request.POST.get('sort_by', None)
         if sort_by:
             queryset = queryset.order_by(sort_by)
+
+        hidden_cols = self.request.POST.get('hidden_cols', None)
+        if hidden_cols:
+            queryset = queryset.defer(hidden_cols)
         return queryset
 
     def paginate_queryset(self, queryset):

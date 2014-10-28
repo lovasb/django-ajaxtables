@@ -5,6 +5,7 @@
         this.post = el.data("post");
         this.method = this.post === undefined ? 'get' : 'post';
         this.onReload = options.onReload;
+        this.onReload = options.onReload;
 
         this.displayFilters = {
             sort_by: {},
@@ -63,8 +64,28 @@
                             'value': elem_id,
                             'col_index': col_index
                         });
-                        $("thead th:nth-child(" + col_index + "), tbody td:nth-child(" + col_index + ")").hide();
+                        $("thead th:nth-child(" + col_index + "), tbody td:nth-child(" + col_index + ")", self.element).hide();
+                        self.showHidden.show();
+                        self.reload();
                     });
+            });
+
+            $.each($('.at-show-hidden', this.element), function (i, o) {
+                var elem = $(o);
+                var showHidden = $(document.createElement('span'));
+                showHidden.attr('title','Show hidden columns');
+                showHidden.addClass('at-btn glyphicon glyphicon-eye-open').hide();
+                elem.append(showHidden);
+
+                showHidden.click(function(){
+                    $.each(self.displayFilters.hidden_cols, function (i, col) {
+                        $("thead th:nth-child(" + col.col_index + "), tbody td:nth-child(" + col.col_index + ")", self.element).show();
+                    });
+                    self.displayFilters.hidden_cols = [];
+                    self.showHidden.hide();
+                    self.reload();
+                });
+                self.showHidden = showHidden;
             });
 
             this.reload();
