@@ -17,11 +17,9 @@
             $.cookie("page_size", page_size);
 
             var self = this;
-            $.each($("th.at-sort-by", this.element), function(i, o){
+            $.each($("th.at-sort", this.element), function(i, o){
                 var elem = $(o);
                 var elem_id = elem.attr('id');
-                var col_index = elem.index() + 1;
-
                 var sortButton = document.createElement('span');
                 elem.prepend(sortButton);
 
@@ -29,41 +27,40 @@
                     .click(function(){
                         var elem = $(this);
                         if(elem.hasClass('glyphicon-sort')){
-                            elem.removeClass('glyphicon-sort').addClass('glyphicon-sort-by-attributes');
+                            elem.removeClass('glyphicon-sort').addClass('glyphicon-sort-by-attributes at-btn-pressed');
                             delete self.displayFilters.sort_by[elem_id];
-                            self.displayFilters.sort_by[elem_id] = {
-                                value: elem_id,
-                                col_index: col_index
-                            };
+                            self.displayFilters.sort_by[elem_id] = {value: elem_id};
 
                             self.reload();
                         }
                         else if(elem.hasClass('glyphicon-sort-by-attributes')){
-                            elem.removeClass('glyphicon-sort-by-attributes').addClass('glyphicon-sort-by-attributes-alt');
+                            elem.removeClass('glyphicon-sort-by-attributes').
+                                addClass('glyphicon-sort-by-attributes-alt at-btn-pressed');
                             delete self.displayFilters.sort_by[elem_id];
-                            self.displayFilters.sort_by[elem_id] = {
-                                value: '-' + elem_id,
-                                col_index: col_index
-                            };
+                            self.displayFilters.sort_by[elem_id] = {value: '-' + elem_id};
 
                             self.reload();
                         }
                         else if(elem.hasClass('glyphicon-sort-by-attributes-alt')){
                             elem.removeClass('glyphicon-sort-by-attributes-alt').addClass('glyphicon-sort');
+                            elem.removeClass('at-btn-pressed');
                             delete self.displayFilters.sort_by[elem_id];
 
                             self.reload();
                         }
                     });
+            });
+
+            $.each($("th.at-hide", this.element), function(i, o) {
+                var elem = $(o);
+                var elem_id = elem.attr('id');
+                var col_index = elem.index() + 1;
 
                 var hideButton = document.createElement('span');
                 elem.append(hideButton);
                 $(hideButton).addClass('at-btn at-hide-btn glyphicon glyphicon-remove')
                     .click(function(){
-                        self.displayFilters.hidden_cols.push({
-                            'value': elem_id,
-                            'col_index': col_index
-                        });
+                        self.displayFilters.hidden_cols.push({'value': elem_id});
                         $("thead th:nth-child(" + col_index + "), tbody td:nth-child(" + col_index + ")", self.element).hide();
                         self.showHidden.show();
                         self.reload();
@@ -79,7 +76,7 @@
 
                 showHidden.click(function(){
                     $.each(self.displayFilters.hidden_cols, function (i, col) {
-                        $("thead th:nth-child(" + col.col_index + "), tbody td:nth-child(" + col.col_index + ")", self.element).show();
+                        $('thead th:hidden, tbody td:hidden', self.element).show();
                     });
                     self.displayFilters.hidden_cols = [];
                     self.showHidden.hide();
