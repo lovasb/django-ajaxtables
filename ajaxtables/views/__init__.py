@@ -17,7 +17,11 @@ class AjaxListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(AjaxListView, self).get_context_data(**kwargs)
-        context['hidden'] = {k: True for k in self.request.POST.getlist('hidden_cols', None)}
+
+        if 'hidden_cols' in self.request.POST:
+            context['hidden'] = {k: True for k in self.request.POST.getlist('hidden_cols')}
+        if 'hidden_cols' in self.request.GET:
+            context['hidden'] = {k: True for k in self.request.GET.getlist('hidden_cols')}
         return context
 
     def get_template_names(self):

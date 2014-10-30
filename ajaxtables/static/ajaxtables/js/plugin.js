@@ -121,6 +121,9 @@
                         $('tbody td:nth-child(' + o.col_index +')', html).hide();
                     });
 
+                    var paginator = html.find('tfoot > tr > td[colspan]');
+                    paginator.attr('colspan', paginator.attr('colspan') - parent.displayFilters.hidden_cols.length);
+
                     parent.element.find('tbody').html(html.find('tbody > tr'));
                     parent.element.find('tfoot').html(html.find('tfoot > tr'));
                     $('ul.pagination > li > a').click(function (e) {
