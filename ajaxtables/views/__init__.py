@@ -35,12 +35,12 @@ class AjaxListView(ListView):
         return {}
 
     def append_display_filters(self, queryset):
-        sort_by = self.request.POST.getlist('sort_by', None)
+        sort_by = self.request.POST.getlist('sort_by', None) or self.request.GET.getlist('sort_by', None)
         if sort_by:
             print sort_by
             queryset = queryset.order_by(*sort_by)
 
-        hidden_cols = self.request.POST.getlist('hidden_cols', None)
+        hidden_cols = self.request.POST.getlist('hidden_cols', None) or self.request.GET.getlist('hidden_cols', None)
         if hidden_cols:
             queryset = queryset.defer(*hidden_cols)
         return queryset
@@ -55,7 +55,7 @@ class AjaxListView(ListView):
 
     def get(self, request, *args, **kwargs):
         if request.is_ajax(): ## no filter form provided, and request for data
-            queryset = self.get_queryset()
+            queryset = self.append_display_filters(self.get_queryset())
             page_size, act_page = self.get_page_from_request()
             page = self.paginate_queryset(queryset)
             self.object_list = page.object_list
