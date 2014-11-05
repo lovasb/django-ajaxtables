@@ -9,3 +9,4 @@ Create simple ajax tables
 - Set the `id` property of the `<th>` element.
     - The value of `id` will be passed as an argument to the `order_by()` function of the table's `queryset` on sorting
     - The `id` will be a key in the var `hidden` which is given to the template, so you can check whether the column is hidden or not
+- Add `at-show-hidden` to one `<th>` where you want the "Show hidden columns" button to be placed
