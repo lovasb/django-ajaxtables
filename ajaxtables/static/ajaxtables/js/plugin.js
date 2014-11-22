@@ -1,7 +1,7 @@
 (function($) {
     function AjaxTable(el, options) {
         this.element = el
-        this.url = el.data("ajaxsource") || window.location.href;
+        this.url = el.data("ajaxsource") || window.location.href.split('?')[0];
         this.post = el.data("post")
         this.method = this.post == undefined ? 'get' : 'post'
         this.onReload = options.onReload;
@@ -17,7 +17,7 @@
             page_size = $.cookie("page_size");
             act_page = page || $.cookie("act_page") || 1;
             $.ajax({
-                url: parent.url + '?' + $.param({'pageSize': page_size, 'page': act_page}),
+                url: parent.url + '?' + $.param($.extend($.QueryString, {'pageSize': page_size, 'page': act_page})),
                 type: parent.method,
                 data: $(parent.post).serialize(),
                 async: false,
