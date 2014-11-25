@@ -97,7 +97,7 @@
             act_page = page || $.cookie("act_page") || 1;
 
             $.ajax({
-                url: parent.url + '?' + $.param({'pageSize': page_size, 'page': act_page}),
+                url: parent.url + '?' + $.param($.extend($.QueryString, {'pageSize': page_size, 'page': act_page})),
                 type: parent.method,
                 data: (function(){
                     var serializedForm = $(parent.post).serializeArray();
