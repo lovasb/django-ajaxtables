@@ -1,7 +1,8 @@
-from vanilla import ListView
-from django.http import HttpResponse
-from django.template.context import RequestContext
 from django.http import Http404
+from django.core.exceptions import ImproperlyConfigured
+
+from vanilla import ListView
+
 
 class AjaxListView(ListView):
     template_names = ['ajaxtables/object_list.html', 'ajaxtables/object_list_data.html']
@@ -13,6 +14,15 @@ class AjaxListView(ListView):
         page_size = int(self.request.GET.get('pageSize', self.page_size))
         act_page = int(self.request.GET.get('toPage', 1))
         return page_size, act_page
+
+    def get_context_data(self, **kwargs):
+        context = super(AjaxListView, self).get_context_data(**kwargs)
+
+        if 'hidden_cols' in self.request.POST:
+            context['hidden'] = {k: True for k in self.request.POST.getlist('hidden_cols')}
+        if 'hidden_cols' in self.request.GET:
+            context['hidden'] = {k: True for k in self.request.GET.getlist('hidden_cols')}
+        return context
 
     def get_template_names(self):
         try:
@@ -28,6 +38,16 @@ class AjaxListView(ListView):
     def form_to_filters(self, form_data):
         return {}
 
+    def append_display_filters(self, queryset):
+        sort_by = self.request.POST.getlist('sort_by', None) or self.request.GET.getlist('sort_by', None)
+        if sort_by:
+            queryset = queryset.order_by(*sort_by)
+
+        hidden_cols = self.request.POST.getlist('hidden_cols', None) or self.request.GET.getlist('hidden_cols', None)
+        if hidden_cols:
+            queryset = queryset.defer(*hidden_cols)
+        return queryset
+
     def paginate_queryset(self, queryset):
         page_size, act_page = self.get_page_from_request()
         try:
@@ -38,7 +58,7 @@ class AjaxListView(ListView):
 
     def get(self, request, *args, **kwargs):
         if request.is_ajax(): ## no filter form provided, and request for data
-            queryset = self.get_queryset()
+            queryset = self.append_display_filters(self.get_queryset())
             page_size, act_page = self.get_page_from_request()
             page = self.paginate_queryset(queryset)
             self.object_list = page.object_list
@@ -55,7 +75,7 @@ class AjaxListView(ListView):
         form = self.filter_form_class(request.POST or None)
         if form.is_valid():
             filters = self.form_to_filters(form.cleaned_data)
-            queryset = self.get_queryset().filter(**filters)
+            queryset = self.append_display_filters(self.get_queryset().filter(**filters))
             page = self.paginate_queryset(queryset)
             self.object_list = page.object_list
             context = self.get_context_data(
