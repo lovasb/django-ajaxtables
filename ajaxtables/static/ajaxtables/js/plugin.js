@@ -1,7 +1,7 @@
 (function($) {
     function AjaxTable(el, options) {
         this.element = el;
-        this.url = el.data("ajaxsource") || window.location.href;
+        this.url = el.data("ajaxsource") || window.location.href.split('?')[0];
         this.post = el.data("post");
         this.method = this.post === undefined ? 'get' : 'post';
         this.onReload = options.onReload;

@@ -1,0 +1,2 @@
+recursive-include ajaxtables/templates *
+recursive-include ajaxtables/static *
