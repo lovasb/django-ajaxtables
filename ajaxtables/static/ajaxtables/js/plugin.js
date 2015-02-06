@@ -74,7 +74,7 @@
                 var elem = $(o);
                 var showHidden = $(document.createElement('span'));
                 showHidden.attr('title','Show hidden columns');
-                showHidden.addClass('at-btn glyphicon glyphicon-eye-open').hide();
+                showHidden.addClass('at-btn at-btn-show glyphicon glyphicon-eye-open').hide();
                 elem.append(showHidden);
 
                 showHidden.click(function(){

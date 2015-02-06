@@ -68,8 +68,10 @@ class AjaxListView(ListView):
                 paginator=page.paginator,
             )
             return self.render_to_response(context)
-        form = self.filter_form_class(request.POST or None) if self.filter_form_class else None
-        return self.render_to_response({'form': form, 'page_size': self.page_size})
+        else:
+            form = self.filter_form_class(request.POST or None) if self.filter_form_class else None
+            context = self.get_context_data(form=form, page_size=self.page_size)
+            return self.render_to_response(context)
 
     def post(self, request, *args, **kwargs):
         form = self.filter_form_class(request.POST or None)
