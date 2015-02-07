@@ -1,7 +1,7 @@
 (function($) {
     function AjaxTable(el, options) {
         this.element = el;
-        this.url = el.data("ajaxsource") || window.location.href;
+        this.url = el.data("ajaxsource") || window.location.href.split('?')[0];
         this.post = el.data("post");
         this.method = this.post === undefined ? 'get' : 'post';
         this.onReload = options.onReload;
@@ -74,7 +74,7 @@
                 var elem = $(o);
                 var showHidden = $(document.createElement('span'));
                 showHidden.attr('title','Show hidden columns');
-                showHidden.addClass('at-btn glyphicon glyphicon-eye-open').hide();
+                showHidden.addClass('at-btn at-btn-show glyphicon glyphicon-eye-open').hide();
                 elem.append(showHidden);
 
                 showHidden.click(function(){
